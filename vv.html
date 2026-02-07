@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Will you be my Valentine Taanu?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fff0f5;
+      --primary:#e91e63;
+      --primary-dark:#c2185b;
+      --text:#2d2a32;
+      --yes:#ffc0cb;          
+      --no:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100svh; display:grid; place-items:center;
+      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: radial-gradient(circle at 20% 20%, #ffe3ec, var(--bg) 60%),
+                  radial-gradient(circle at 80% 80%, #ffd1e0, var(--bg) 60%);
+      color:var(--text);
+    }
+    .card{
+      width:min(720px,92vw); background:#fff; border-radius:18px; padding:28px 26px 30px;
+      box-shadow:0 20px 50px rgba(233,30,99,.15), 0 6px 18px rgba(0,0,0,.06);
+      text-align:center; position:relative; overflow:hidden; min-height:420px;
+    }
+    h1{
+      margin:8px 0 6px; font-size:clamp(28px,4.6vw,44px); line-height:1.1; font-weight:800;
+      color:var(--primary);
+    }
+    p.subtitle{margin:0 0 18px; opacity:.85}
+    .heart{
+      position:absolute; inset:auto -10px -14px auto; width:120px; opacity:.15; filter:drop-shadow(0 0 0 rgba(0,0,0,0));
+      pointer-events:none;
+    }
+    .cta{display:flex; gap:14px; justify-content:center; margin:18px 0 6px; flex-wrap:wrap}
+    button{
+      border:0; border-radius:999px; padding:12px 22px; font-size:16px; font-weight:700; cursor:pointer;
+      transition:transform .05s ease, box-shadow .2s ease, background .2s ease;
+      box-shadow:0 8px 18px rgba(0,0,0,.08);
+      position:relative;
+    }
+    .yes{
+      background:var(--yes); color:#8b0f3a; /* darker text for contrast on baby pink */
+      border:2px solid #f8a9b8;
+    }
+    .yes:hover{transform:translateY(-1px)}
+    .no{
+      background:#fff; color:var(--no); border:2px solid var(--no);
+    }
+    .no:hover{transform:translateY(-1px)}
+    .hidden{display:none}
+    .result{ margin-top:12px; animation:pop .35s ease-out; }
+    .result h2{font-size:clamp(26px,4vw,36px); margin:8px 0 12px; color:var(--primary-dark)}
+    .gif-wrap{
+      display:flex; gap:14px; flex-wrap:wrap; justify-content:center; align-items:center;
+    }
+    .gif{
+      width:min(330px,42vw); border-radius:12px; box-shadow:0 10px 24px rgba(233,30,99,.18);
+    }
+    @keyframes pop{0%{transform:scale(.95);opacity:.0}100%{transform:scale(1);opacity:1}}
+    footer{margin-top:20px; font-size:12px; opacity:.7}
+    .tiny{font-size:12px}
+
+    @media (max-width:480px){
+      .card{min-height:520px;}
+    }
+  </style>
+</head>
+<body>
+  <main class="card" role="main" aria-live="polite">
+    <img class="heart" src="data:image/svg+xml;utf8,
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'>
+        <path fill='%23e91e63' d='M60 105s-35-21-45-41C7 49 14 33 30 30c10-2 20 3 30 13 10-10 20-15 30-13 16 3 23 19 15 34-10 20-45 41-45 41Z'/>
+      </svg>" alt="">
+    <h1>Will you be my Valentine? 💌</h1>
+    <p class="subtitle tiny">— from Srajan</p>
+
+    <div id="question" class="cta" aria-label="answer choices">
+      <button id="yesBtn" class="yes">Yes 💖</button>
+      <button id="noBtn" class="no">No 😅</button>
+    </div>
+
+    <section id="result" class="result hidden">
+      <h2>Ye Le! 🥰</h2>
+      <div class="gif-wrap">
+        <!-- 🧸 Aesthetic cute bear hug -->
+        <img
+          class="gif"
+          alt="Cute bear hug"
+          src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+        <!-- 🤯 Cute 'blown away by reaction' / surprised reaction -->
+        <img
+          class="gif"
+          alt="Adorable blown-away reaction"
+          src="https://media.giphy.com/media/l0ExncehJzexFpRHq/giphy.gif">
+      </div>
+      <p style="margin-top:10px;"> 💫</p>
+    </section>
+
+    <footer id="footerHint" class="tiny">Tap a button to answer.</footer>
+
+    <!-- (Optional) Tiny confetti canvas -->
+    <canvas id="confetti" class="hidden" style="position:fixed;inset:0;pointer-events:none;"></canvas>
+  </main>
+
+  <script>
+    const yes = document.getElementById('yesBtn');
+    const no = document.getElementById('noBtn');
+    const result = document.getElementById('result');
+    const question = document.getElementById('question');
+    const footer = document.getElementById('footerHint');
+
+    // --- YES logic: reveal GIFs + confetti ---
+    yes.addEventListener('click', () => {
+      question.classList.add('hidden');
+      result.classList.remove('hidden');
+    //   footer.textContent = "Date night loading… 💖";
+      startConfettiBurst(); // remove this line & function to disable confetti
+    });
+
+    // --- NO logic: keep moving around the screen ---
+    function placeNoRandomly() {
+      if (getComputedStyle(no).position !== 'fixed') {
+        no.style.position = 'fixed';
+      }
+      const btnRect = no.getBoundingClientRect();
+      const pad = 8;
+      const maxX = Math.max(0, window.innerWidth - btnRect.width - pad);
+      const maxY = Math.max(0, window.innerHeight - btnRect.height - pad);
+      const x = Math.floor(Math.random() * (maxX - pad + 1)) + pad;
+      const y = Math.floor(Math.random() * (maxY - pad + 1)) + pad;
+      no.style.left = x + 'px';
+      no.style.top  = y + 'px';
+    }
+    let roamTimer = setInterval(placeNoRandomly, 700);
+    ['mouseenter','focus','touchstart','click'].forEach(evt => {
+      no.addEventListener(evt, placeNoRandomly, { passive:true });
+    });
+    yes.addEventListener('click', () => {
+      clearInterval(roamTimer);
+      no.style.display = 'none';
+    });
+    window.addEventListener('load', placeNoRandomly);
+    window.addEventListener('resize', placeNoRandomly);
+
+    // --- (Optional) minimal confetti burst ---
+    function startConfettiBurst(){
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      canvas.classList.remove('hidden');
+
+      const colors = ['#ffc0cb','#ff80ab','#ff4d6d','#ffe3ec','#ffd1e0'];
+      const pieces = Array.from({length: 140}).map(() => ({
+        x: Math.random()*canvas.width,
+        y: -20 - Math.random()*40,
+        r: 4 + Math.random()*4,
+        c: colors[Math.floor(Math.random()*colors.length)],
+        s: 2 + Math.random()*3,
+        a: 1
+      }));
+
+      let frames = 0;
+      function draw(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        pieces.forEach(p => {
+          ctx.globalAlpha = p.a;
+          ctx.fillStyle = p.c;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+          p.y += p.s; p.x += Math.sin((frames+p.y)/20);
+          if (p.y > canvas.height) p.a -= 0.02;  // fade out near bottom
+        });
+        frames++;
+        if (frames < 220) requestAnimationFrame(draw);
+        else canvas.classList.add('hidden');
+      }
+      draw();
+    }
+  </script>
+</body>
+</html>
