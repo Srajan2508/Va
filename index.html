@@ -4,108 +4,354 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Will you be my Valentine Taanu?</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  https://fonts.googleapis.com
+  https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap
+
   <style>
     :root{
       --bg:#fff0f5;
+      --card:#ffffff;
       --primary:#e91e63;
       --primary-dark:#c2185b;
       --text:#2d2a32;
-      --yes:#ffc0cb;          
+      --yes:#ffc0cb;
       --no:#ef4444;
+      --soft:#ffe3ec;
+      --shadow: 0 20px 50px rgba(233,30,99,.15), 0 6px 18px rgba(0,0,0,.06);
     }
+
     *{box-sizing:border-box}
     body{
       margin:0; min-height:100svh; display:grid; place-items:center;
       font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background: radial-gradient(circle at 20% 20%, #ffe3ec, var(--bg) 60%),
-                  radial-gradient(circle at 80% 80%, #ffd1e0, var(--bg) 60%);
+      background:
+        radial-gradient(circle at 18% 22%, #ffe3ec, var(--bg) 60%),
+        radial-gradient(circle at 85% 85%, #ffd1e0, var(--bg) 60%),
+        radial-gradient(circle at 70% 18%, #fff7fb, transparent 55%);
       color:var(--text);
+      overflow-x:hidden;
     }
-    .card{
-      width:min(720px,92vw); background:#fff; border-radius:18px; padding:28px 26px 30px;
-      box-shadow:0 20px 50px rgba(233,30,99,.15), 0 6px 18px rgba(0,0,0,.06);
-      text-align:center; position:relative; overflow:hidden; min-height:420px;
-    }
-    h1{
-      margin:8px 0 6px; font-size:clamp(28px,4.6vw,44px); line-height:1.1; font-weight:800;
-      color:var(--primary);
-    }
-    p.subtitle{margin:0 0 18px; opacity:.85}
-    .heart{
-      position:absolute; inset:auto -10px -14px auto; width:120px; opacity:.15; filter:drop-shadow(0 0 0 rgba(0,0,0,0));
+
+    /* soft floating petals */
+    .petal{
+      position:fixed;
+      width:14px; height:14px;
+      background: radial-gradient(circle at 30% 30%, #fff, #ffc0cb 70%);
+      border-radius: 60% 40% 60% 40%;
+      opacity:.55;
+      filter: blur(.2px);
       pointer-events:none;
+      animation: floaty 8s linear infinite;
     }
-    .cta{display:flex; gap:14px; justify-content:center; margin:18px 0 6px; flex-wrap:wrap}
-    button{
-      border:0; border-radius:999px; padding:12px 22px; font-size:16px; font-weight:700; cursor:pointer;
-      transition:transform .05s ease, box-shadow .2s ease, background .2s ease;
-      box-shadow:0 8px 18px rgba(0,0,0,.08);
+    @keyframes floaty{
+      from { transform: translateY(-20px) translateX(0) rotate(0deg); }
+      to   { transform: translateY(110vh) translateX(60px) rotate(240deg); }
+    }
+
+    .card{
+      width:min(760px,92vw);
+      background: linear-gradient(180deg, #ffffff, #fff7fb);
+      border-radius:22px;
+      padding:26px 22px 28px;
+      box-shadow: var(--shadow);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      min-height:460px;
+      isolation:isolate;
+    }
+
+    /* glossy highlight */
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-120px -120px auto auto;
+      width:260px; height:260px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,192,203,.55), transparent 60%);
+      transform: rotate(15deg);
+      z-index:0;
+    }
+
+    /* subtle bottom glow */
+    .card::after{
+      content:"";
+      position:absolute;
+      left:50%; bottom:-140px;
+      transform:translateX(-50%);
+      width:520px; height:260px;
+      background: radial-gradient(circle, rgba(233,30,99,.14), transparent 70%);
+      z-index:0;
+    }
+
+    .content{ position:relative; z-index:1; }
+
+    /* Bouquet hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      place-items:center;
+      margin-top:4px;
+    }
+
+    .bouquet-wrap{
+      width:min(360px,78vw);
+      display:grid;
+      place-items:center;
+      margin: 2px auto 4px;
       position:relative;
     }
+
+    .bouquet{
+      width:100%;
+      max-width:360px;
+      filter: drop-shadow(0 14px 24px rgba(233,30,99,.18));
+      transform: translateY(2px);
+    }
+
+    .bouquet-wrap .sparkle{
+      position:absolute;
+      inset:auto auto 6% 10%;
+      width:10px; height:10px;
+      border-radius:50%;
+      background: rgba(255,255,255,.9);
+      box-shadow:
+        24px -12px 0 rgba(255,255,255,.7),
+        64px 10px 0 rgba(255,255,255,.65),
+        110px -18px 0 rgba(255,255,255,.55);
+      filter: blur(.2px);
+      opacity:.9;
+      animation: twinkle 1.8s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle{
+      from{ transform: translateY(0) scale(.95); opacity:.75; }
+      to{ transform: translateY(-2px) scale(1.05); opacity:1; }
+    }
+
+    .tag{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,192,203,.35);
+      border: 1px solid rgba(233,30,99,.12);
+      color:#8b0f3a;
+      font-weight:700;
+      font-size:13px;
+      margin: 6px 0 2px;
+    }
+
+    h1{
+      margin:8px 0 6px;
+      font-size:clamp(28px,4.6vw,46px);
+      line-height:1.1;
+      font-weight:800;
+      color:var(--primary);
+      letter-spacing:.2px;
+    }
+
+    p.subtitle{
+      margin:0 0 14px;
+      opacity:.9;
+    }
+    .tiny{font-size:12px}
+
+    .cta{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      margin:16px 0 6px;
+      flex-wrap:wrap
+    }
+
+    button{
+      border:0;
+      border-radius:999px;
+      padding:12px 22px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .06s ease, box-shadow .2s ease, background .2s ease;
+      box-shadow:0 10px 22px rgba(0,0,0,.10);
+      position:relative;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     .yes{
-      background:var(--yes); color:#8b0f3a; /* darker text for contrast on baby pink */
+      background:var(--yes);
+      color:#8b0f3a;
       border:2px solid #f8a9b8;
     }
     .yes:hover{transform:translateY(-1px)}
+    .yes:active{transform:translateY(0px) scale(.99)}
+
     .no{
-      background:#fff; color:var(--no); border:2px solid var(--no);
+      background:#fff;
+      color:var(--no);
+      border:2px solid var(--no);
     }
     .no:hover{transform:translateY(-1px)}
+
     .hidden{display:none}
-    .result{ margin-top:12px; animation:pop .35s ease-out; }
-    .result h2{font-size:clamp(26px,4vw,36px); margin:8px 0 12px; color:var(--primary-dark)}
+
+    .result{
+      margin-top:12px;
+      animation:pop .35s ease-out;
+      position:relative;
+      z-index:1;
+    }
+    .result h2{
+      font-size:clamp(26px,4vw,36px);
+      margin:8px 0 12px;
+      color:var(--primary-dark)
+    }
+
     .gif-wrap{
-      display:flex; gap:14px; flex-wrap:wrap; justify-content:center; align-items:center;
+      display:flex; gap:14px; flex-wrap:wrap;
+      justify-content:center; align-items:center;
     }
     .gif{
-      width:min(330px,42vw); border-radius:12px; box-shadow:0 10px 24px rgba(233,30,99,.18);
+      width:min(330px,42vw);
+      border-radius:12px;
+      box-shadow:0 10px 24px rgba(233,30,99,.18);
     }
-    @keyframes pop{0%{transform:scale(.95);opacity:.0}100%{transform:scale(1);opacity:1}}
-    footer{margin-top:20px; font-size:12px; opacity:.7}
-    .tiny{font-size:12px}
+
+    @keyframes pop{
+      0%{transform:scale(.95);opacity:0}
+      100%{transform:scale(1);opacity:1}
+    }
+
+    footer{margin-top:18px; font-size:12px; opacity:.75}
 
     @media (max-width:480px){
-      .card{min-height:520px;}
+      .card{min-height:560px;}
+      .bouquet-wrap{width:min(340px,88vw);}
     }
   </style>
 </head>
+
 <body>
+  <!-- floating petals (decor) -->
+  <span class="petal" style="left:12%; animation-delay:-1s; opacity:.45"></span>
+  <span class="petal" style="left:32%; animation-delay:-3s; width:12px; height:12px"></span>
+  <span class="petal" style="left:58%; animation-delay:-2.2s; width:16px; height:16px; opacity:.4"></span>
+  <span class="petal" style="left:78%; animation-delay:-4s"></span>
+  <span class="petal" style="left:90%; animation-delay:-5.2s; width:11px; height:11px; opacity:.35"></span>
+
   <main class="card" role="main" aria-live="polite">
-    <img class="heart" src="data:image/svg+xml;utf8,
-      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'>
-        <path fill='%23e91e63' d='M60 105s-35-21-45-41C7 49 14 33 30 30c10-2 20 3 30 13 10-10 20-15 30-13 16 3 23 19 15 34-10 20-45 41-45 41Z'/>
-      </svg>" alt="">
-    <h1>Will you be my Valentine? 💌</h1>
-    <p class="subtitle tiny">— from Srajan</p>
+    <div class="content">
+      <!-- HERO: Bouquet + headline -->
+      <div class="hero">
+        <div class="tag">💐 A little bouquet for you</div>
 
-    <div id="question" class="cta" aria-label="answer choices">
-      <button id="yesBtn" class="yes">Yes 💖</button>
-      <button id="noBtn" class="no">No 😅</button>
-    </div>
+        <div class="bouquet-wrap" aria-hidden="true">
+          <div class="sparkle"></div>
 
-    <section id="result" class="result hidden">
-      <h2>Ye Le! 🥰</h2>
-      <div class="gif-wrap">
-        <!-- 🧸 Aesthetic cute bear hug -->
-        <img
-          class="gif"
-          alt="Cute bear hug"
-          src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
-        <!-- 🤯 Cute 'blown away by reaction' / surprised reaction -->
-        <img
-          class="gif"
-          alt="Adorable blown-away reaction"
-          src="https://media.giphy.com/media/l0ExncehJzexFpRHq/giphy.gif">
+          <!-- Inline SVG bouquet (no external files needed) -->
+          <svg class="bouquet" viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="wrap" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fff1f6"/>
+                <stop offset="1" stop-color="#ffd1e0"/>
+              </linearGradient>
+              <linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff80ab"/>
+                <stop offset="1" stop-color="#e91e63"/>
+              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#e91e63" flood-opacity=".18"/>
+              </filter>
+            </defs>
+
+            <!-- wrap paper -->
+            <path filter="url(#softShadow)"
+              d="M90 330 C150 250, 155 210, 165 180 C190 105, 285 105, 305 180 C315 210, 320 250, 330 330 Z"
+              fill="url(#wrap)" stroke="#f5a7bb" stroke-opacity=".55" stroke-width="3" />
+            <path
+              d="M110 330 C160 260, 170 220, 185 185 C205 130, 270 130, 290 185 C305 220, 310 260, 312 330 Z"
+              fill="#fff" opacity=".35" />
+
+            <!-- stems -->
+            <path d="M210 115 C200 170, 200 220, 200 295" stroke="#2fb07b" stroke-width="8" stroke-linecap="round"/>
+            <path d="M240 120 C235 170, 235 225, 235 295" stroke="#2fb07b" stroke-width="8" stroke-linecap="round"/>
+            <path d="M175 125 C182 170, 188 230, 192 295" stroke="#2fb07b" stroke-width="8" stroke-linecap="round"/>
+
+            <!-- leaves -->
+            <path d="M185 190 C155 180, 140 155, 158 140 C180 121, 205 148, 205 170 C205 188, 197 196, 185 190Z"
+              fill="#3fd09b" opacity=".9"/>
+            <path d="M245 198 C272 186, 295 160, 275 142 C252 121, 233 150, 235 172 C237 190, 236 202, 245 198Z"
+              fill="#3fd09b" opacity=".9"/>
+
+            <!-- flowers -->
+            <!-- left flower -->
+            <g transform="translate(150 120)">
+              <circle cx="0" cy="0" r="12" fill="#ffd54a"/>
+              <g fill="#ff80ab">
+                <ellipse rx="20" ry="12" transform="rotate(0) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(60) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(120) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(180) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(240) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(300) translate(26 0)"/>
+              </g>
+            </g>
+
+            <!-- center rose-ish -->
+            <g transform="translate(215 105)">
+              <circle cx="0" cy="0" r="28" fill="#ff4d6d" opacity=".95"/>
+              <path d="M-18 -2 C-10 -18, 10 -18, 18 -2 C10 12, -10 12, -18 -2Z" fill="#ff80ab" opacity=".9"/>
+              <path d="M-10 6 C-6 -2, 6 -2, 10 6 C6 14, -6 14, -10 6Z" fill="#ffd1e0" opacity=".7"/>
+              <circle cx="0" cy="-2" r="6" fill="#ffd54a" opacity=".9"/>
+            </g>
+
+            <!-- right flower -->
+            <g transform="translate(275 125)">
+              <circle cx="0" cy="0" r="12" fill="#ffd54a"/>
+              <g fill="#ffc0cb">
+                <ellipse rx="20" ry="12" transform="rotate(0) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(60) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(120) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(180) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(240) translate(26 0)"/>
+                <ellipse rx="20" ry="12" transform="rotate(300) translate(26 0)"/>
+              </g>
+            </g>
+
+            <!-- ribbon -->
+            <g transform="translate(210 265)">
+              <path d="M-42 0 C-30 -22, -10 -22, 0 0 C-10 22, -30 22, -42 0Z" fill="url(#ribbon)"/>
+              <path d="M42 0 C30 -22, 10 -22, 0 0 C10 22, 30 22, 42 0Z" fill="url(#ribbon)"/>
+              <circle cx="0" cy="0" r="16" fill="#ff80ab" stroke="#e91e63" stroke-width="3"/>
+              <path d="M-10 18 L-40 55" stroke="#e91e63" stroke-width="8" stroke-linecap="round"/>
+              <path d="M10 18 L40 55" stroke="#e91e63" stroke-width="8" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+
+        <h1>Will you be my Valentine? 💌</h1>
+        <p class="subtitle tiny">— from Srajan</p>
       </div>
-      <p style="margin-top:10px;"> 💫</p>
-    </section>
 
-    <footer id="footerHint" class="tiny">Tap a button to answer.</footer>
+      <div id="question" class="cta" aria-label="answer choices">
+        <button id="yesBtn" class="yes">Yes 💖</button>
+        <button id="noBtn" class="no">No 😅</button>
+      </div>
 
-    <!-- (Optional) Tiny confetti canvas -->
-    <canvas id="confetti" class="hidden" style="position:fixed;inset:0;pointer-events:none;"></canvas>
+      <section id="result" class="result hidden">
+        <h2>Ye Le! 🥰</h2>
+        <div class="gif-wrap">
+          https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif
+          https://media.giphy.com/media/l0ExncehJzexFpRHq/giphy.gif
+        </div>
+        <p style="margin-top:10px;">💫</p>
+      </section>
+
+      <footer id="footerHint" class="tiny">Tap a button to answer.</footer>
+
+      <canvas id="confetti" class="hidden" style="position:fixed;inset:0;pointer-events:none;"></canvas>
+    </div>
   </main>
 
   <script>
@@ -119,8 +365,7 @@
     yes.addEventListener('click', () => {
       question.classList.add('hidden');
       result.classList.remove('hidden');
-    //   footer.textContent = "Date night loading… 💖";
-      startConfettiBurst(); // remove this line & function to disable confetti
+      startConfettiBurst();
     });
 
     // --- NO logic: keep moving around the screen ---
@@ -148,7 +393,7 @@
     window.addEventListener('load', placeNoRandomly);
     window.addEventListener('resize', placeNoRandomly);
 
-    // --- (Optional) minimal confetti burst ---
+    // --- confetti burst ---
     function startConfettiBurst(){
       const canvas = document.getElementById('confetti');
       const ctx = canvas.getContext('2d');
@@ -173,7 +418,7 @@
           ctx.fillStyle = p.c;
           ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
           p.y += p.s; p.x += Math.sin((frames+p.y)/20);
-          if (p.y > canvas.height) p.a -= 0.02;  // fade out near bottom
+          if (p.y > canvas.height) p.a -= 0.02;
         });
         frames++;
         if (frames < 220) requestAnimationFrame(draw);
@@ -184,4 +429,3 @@
   </script>
 </body>
 </html>
-
